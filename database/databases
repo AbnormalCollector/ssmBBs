@@ -1,0 +1,87 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : mysql
+ Source Server Type    : MySQL
+ Source Server Version : 80023
+ Source Host           : localhost:3306
+ Source Schema         : ssmbbs
+
+ Target Server Type    : MySQL
+ Target Server Version : 80023
+ File Encoding         : 65001
+
+ Date: 15/01/2022 10:01:21
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for datadictionary
+-- ----------------------------
+DROP TABLE IF EXISTS `datadictionary`;
+CREATE TABLE `datadictionary`  (
+  `id` int(0) NULL DEFAULT NULL,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for invitation
+-- ----------------------------
+DROP TABLE IF EXISTS `invitation`;
+CREATE TABLE `invitation`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `summary` varchar(10000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `clicks` int(0) NULL DEFAULT 0,
+  `answer` int(0) NULL DEFAULT 0,
+  `createdate` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `uid` int(0) NULL DEFAULT NULL,
+  `pid` int(0) NULL DEFAULT NULL,
+  `status` int(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for plate
+-- ----------------------------
+DROP TABLE IF EXISTS `plate`;
+CREATE TABLE `plate`  (
+  `id` int(0) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for reply
+-- ----------------------------
+DROP TABLE IF EXISTS `reply`;
+CREATE TABLE `reply`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `invid` int(0) NOT NULL,
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `createDate` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `uid` int(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `reply_datail_invid_fk`(`invid`) USING BTREE,
+  CONSTRAINT `reply_ibfk_1` FOREIGN KEY (`invid`) REFERENCES `invitation` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` int(0) NULL DEFAULT 0,
+  `enable` int(0) NULL DEFAULT 0,
+  `post` int(0) NULL DEFAULT 0,
+  `createDate` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `replyStatus` int(0) NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
