@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.mapper.InvitationMapper">
+
+    <resultMap id="baseResultMap" type="com.sy.model.Invitation">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="summary" property="summary"></result>
+        <result column="clicks" property="clicks"></result>
+        <result column="answer" property="answer"></result>
+        <result column="createDate" property="createDate"></result>
+        <result column="uid" property="uid"></result>
+        <result column="pid" property="pid"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+
+    <select id="selectInvitationAll" resultMap="baseResultMap" parameterType="com.sy.model.Invitation">
+        SELECT i.id, i.title, i.clicks, i.answer, i.createDate, i.uid, i.pid,i.status
+        from invitation i
+        where pid = #{pid}
+        and title like concat('%', #{title}, '%')
+        <if test="uid != null and uid != ''">
+            and uid=#{uid}
+        </if>
+    </select>
+
+    <select id="selectAllBYTile" resultMap="baseResultMap" parameterType="com.sy.model.Invitation">
+        SELECT *
+        from invitation
+        <where>
+            <if test="title != null">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="uid != null and uid != ''">
+                and uid = #{uid}
+            </if>
+        </where>
+        order by createDate desc
+    </select>
+    <select id="selectAllBYUid" resultMap="baseResultMap" parameterType="com.sy.model.Invitation">
+        SELECT *
+        from invitation
+        <where>
+            <if test="uid != null and uid != ''">
+                and uid = #{uid}
+            </if>
+        </where>
+        order by createDate desc
+    </select>
+    <update id="updateInvitation" parameterType="com.sy.model.Invitation">
+        update invitation
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="summary != null and summary != ''">
+                summary = #{summary,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateClicks" parameterType="com.sy.model.Invitation">
+        update invitation
+        <set>
+            <if test="clicks != null and clicks !=''">
+                clicks = clicks+#{clicks},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updatePid" parameterType="com.sy.model.Invitation">
+        update invitation
+        <set>
+            <if test="title != null and title !=''">
+                title = #{title},
+            </if>
+            <if test="summary != null and summary !=''">
+                summary = #{summary},
+            </if>
+            <if test="pid != null and pid !=''">
+                pid =#{pid},
+            </if>
+            <if test="status != null and status !=''">
+                status =#{status},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateAnswer" parameterType="com.sy.model.Invitation">
+        update invitation
+        <set>
+            <if test="answer != null and answer !=''">
+                answer = answer+#{answer},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>
